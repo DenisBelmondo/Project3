@@ -1,55 +1,59 @@
 const BUTTON_RAD = 64;
 
+const CANVAS = document.getElementById("myCanvas");
+const CTX = CANVAS.getContext("2d");
+
 class MenuItem
 {
 	constructor(label)
 	{
 		this.label = label;
+		this.scale = 1.0;
 	}
 	
-	draw(ctx, x, y)
+	draw(x, y)
 	{
 		// draw the circle
 		
-		ctx.beginPath();
-		ctx.strokeStyle = "#FFF";
-		ctx.arc(x, y, BUTTON_RAD, 0, Math.PI * 2);
-		ctx.stroke();
+		CTX.beginPath();
+		CTX.arc(x, y, BUTTON_RAD * this.scale, 0, Math.PI*2);
+		CTX.strokeStyle = "#FFF";
+		CTX.stroke();
+		CTX.closePath();
 		
 		// draw the label
 		
-		ctx.font = "20px Arial";
-		ctx.fillStyle = "#FFF";
-		ctx.textAlign = "center";
-		ctx.fillText(this.label, x, y);
+		CTX.font = "20px Arial";
+		CTX.fillStyle = "#FFF";
+		CTX.textAlign = "center";
+		CTX.fillText(this.label, x, y);
+		
 	}
 }
 
-function main()
+const MENUGRID = [
+	[new MenuItem("Appetizers"), new MenuItem("Sushi"), new MenuItem("Grill")],
+	[new MenuItem("Tempura"), new MenuItem("Nigiri")],
+	[new MenuItem("Miso"), new MenuItem("Ramen"), new MenuItem("Dessert")]
+];
+
+function tick()
 {
 	const PADDING = 96;
 	const OFFSET = 96;
 	
-	const CANVAS = document.getElementById("myCanvas");
-	const CTX = CANVAS.getContext("2d");
+	CTX.clearRect(0, 0, CANVAS.width, CANVAS.height);
 	
 	CTX.fillStyle = "#000";
 	CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
 	
-	var menuGrid = [
-		[new MenuItem("Appetizers"), new MenuItem("Sushi"), new MenuItem("Grill")],
-		[new MenuItem("Tempura"), new MenuItem("Nigiri")],
-		[new MenuItem("Miso"), new MenuItem("Ramen"), new MenuItem("Dessert")]
-	];
-	
 	// DIRTY BUT IT WORKS!
 	
-	for(var i = 0; i < menuGrid.length; ++i)
+	for(var i = 0; i < MENUGRID.length; ++i)
 	{
-		for(var j = 0; j < menuGrid[i].length; ++j)
+		for(var j = 0; j < MENUGRID[i].length; ++j)
 		{	
-			menuGrid[i][j].draw(
-				CTX,
+			MENUGRID[i][j].draw (
 				((j * BUTTON_RAD) + (j * PADDING) + OFFSET)
 					// stagger every second row
 					+ ((i + 1) % 2 == 0 ? BUTTON_RAD : 0)
@@ -62,12 +66,4 @@ function main()
 	return;
 }
 
-function tick()
-{
-	
-	
-	return;
-}
-
-main();
 setInterval(tick, 1000 / 60);
