@@ -28,6 +28,7 @@ class MenuItem
 function main()
 {
 	const PADDING = 96;
+	const OFFSET = 96;
 	
 	const CANVAS = document.getElementById("myCanvas");
 	const CTX = CANVAS.getContext("2d");
@@ -35,16 +36,38 @@ function main()
 	CTX.fillStyle = "#000";
 	CTX.fillRect(0, 0, CANVAS.width, CANVAS.height);
 	
-	var menuItems = [new MenuItem("Sushi"), new MenuItem("Sashimi")];
+	var menuGrid = [
+		[new MenuItem("Appetizers"), new MenuItem("Sushi"), new MenuItem("Grill")],
+		[new MenuItem("Tempura"), new MenuItem("Nigiri")],
+		[new MenuItem("Miso"), new MenuItem("Ramen"), new MenuItem("Dessert")]
+	];
 	
 	// DIRTY BUT IT WORKS!
-	for(var i = 0; i < menuItems.length; ++i)
+	
+	for(var i = 0; i < menuGrid.length; ++i)
 	{
-		menuItems[i].draw(CTX,
-			(i * BUTTON_RAD) + (i * PADDING) + PADDING, PADDING);
+		for(var j = 0; j < menuGrid[i].length; ++j)
+		{	
+			menuGrid[i][j].draw(
+				CTX,
+				((j * BUTTON_RAD) + (j * PADDING) + OFFSET)
+					// stagger every second row
+					+ ((i + 1) % 2 == 0 ? BUTTON_RAD : 0)
+					+ 200,
+				(i * BUTTON_RAD) + (i * PADDING) + OFFSET
+			);
+		}
 	}
 	
 	return;
 }
 
+function tick()
+{
+	
+	
+	return;
+}
+
 main();
+setInterval(tick, 1000 / 60);
